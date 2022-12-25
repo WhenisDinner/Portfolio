@@ -32,9 +32,13 @@ renderer.shadowMap.enabled = true
 
 document.body.appendChild(renderer.domElement);
 renderer.render(scene, camera);
+const clock = new THREE.Clock()
 
 function animate(){
+    const elapsedTime = clock.getElapsedTime()
+    mesh.position.y = Math.sin(elapsedTime) * 1
     requestAnimationFrame(animate)
+    mesh.rotateX(30*0.0003)
     renderer.render(scene, camera)
 }
 
