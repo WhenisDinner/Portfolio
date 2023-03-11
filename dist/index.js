@@ -2,19 +2,19 @@ import * as THREE from 'https://unpkg.com/three@0.127.0/build/three.module.js'
 
 class Application{
     constructor(){
-        this.scene = new THREE.Scene()
+        this.scene = new THREE.Scene();
         
-        this.renderer = new THREE.WebGLRenderer()
-        this.renderer.setClearColor(0x000000, 1.0)
-        this.renderer.setSize(window.innerWidth/2, window.innerHeight/2)
-        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-        this.renderer.shadowMap.enabled = true
+        this.renderer = new THREE.WebGLRenderer();
+        this.renderer.setClearColor(0xffffff, 1.0);
+        this.renderer.setSize(window.innerWidth/2.00, window.innerHeight/2.00);
+        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        this.renderer.shadowMap.enabled = true;
         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         
-        this.clock = new THREE.Clock()
+        this.clock = new THREE.Clock();
 
-        this.camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 1000)
-        this.camera.position.set(15, 16, 12)
+        this.camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 1000);
+        this.camera.position.set(8, 25, 12);
         this.camera.lookAt(this.scene.position);
 
         //set up light
@@ -28,40 +28,50 @@ class Application{
         this.scene.add( this.helper );
 
         //load textures and meshes
-        this.textureLoader = new THREE.TextureLoader()
-        let texture = this.textureLoader.load('static/qt.jpg')
-        const geom_cube = new THREE.BoxGeometry(1, 1, 1)
+        this.textureLoader = new THREE.TextureLoader();
+        let texture = this.textureLoader.load('static/qt.jpg');
+        const geom_cube = new THREE.BoxGeometry(1, 1, 1);
         const material = new THREE.MeshStandardMaterial({
             map: texture
-        })
-        this.mesh = new THREE.Mesh(geom_cube, material)
-        this.mesh.castShadow = true
-        this.mesh.receiveShadow = true
-        this.scene.add(this.mesh)
+        });
+        this.mesh = new THREE.Mesh(geom_cube, material);
+        this.mesh.castShadow = true;
+        this.mesh.receiveShadow = true;
+        this.scene.add(this.mesh);
         
-        const geom_floor = new THREE.BoxGeometry(20, 1, 20)
-        let floor = new THREE.Mesh(geom_floor, material)
-        this.mesh.castShadow = true
-        floor.receiveShadow = true
-        this.scene.add(floor)
-        floor.position.y = -3
+        const geom_floor = new THREE.BoxGeometry(20, 1, 20);
+        let floor = new THREE.Mesh(geom_floor, material);
+        floor.castShadow = true;
+        floor.receiveShadow = true;
+        floor.position.y = -3;
+        this.scene.add(floor);
         
         //initial render
-        document.body.appendChild(this.renderer.domElement)
-        this.renderer.render(this.scene, this.camera)
+        document.body.appendChild(this.renderer.domElement);
+        this.renderer.domElement.id = "title_effect";
+        this.renderer.render(this.scene, this.camera);
     }
 }
 
 var app = new Application()
+console.log(document.body)
+document.getElementById("title_effect").addEventListener("click", MouseClick)
+
+var initial_scale = app.mesh.scale;
 
 function animate(){
     const elapsedTime = app.clock.getElapsedTime()
-    app.mesh.position.y = Math.sin(elapsedTime) * 1
-    app.mesh.rotateX(30*0.0003)
+    app.mesh.scale.set(2 + Math.sin(elapsedTime*2)/7.0,
+                       2 + Math.sin(elapsedTime*2)/7.0,
+                       2 + Math.sin(elapsedTime*2)/7.0)
     requestAnimationFrame(animate)
     app.renderer.render(app.scene, app.camera)
-    app.light.target.updateMatrixWorld();
-    app.helper.update();
+    app.helper.update()
+}
+
+function MouseClick(evt) {
+    var mouse_pos = evt.clientX
+    console.log(mouse_pos)
 }
 
 animate()
