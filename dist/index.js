@@ -6,7 +6,7 @@ class Application{
         
         this.renderer = new THREE.WebGLRenderer()
         this.renderer.setClearColor(0x000000, 1.0)
-        this.renderer.setSize(window.innerWidth, window.innerHeight)
+        this.renderer.setSize(window.innerWidth/2, window.innerHeight/2)
         this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
         this.renderer.shadowMap.enabled = true
         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
