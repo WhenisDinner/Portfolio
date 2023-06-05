@@ -41,6 +41,9 @@ class Application{
         
         const geom_floor = new THREE.BoxGeometry(20, 1, 20);
         let floor = new THREE.Mesh(geom_floor, material);
+        floor.material.transparent = true
+        floor.material.opacity = 0.5
+        console.log(floor.material.opacity)
         floor.castShadow = true;
         floor.receiveShadow = true;
         floor.position.y = -3;
@@ -53,12 +56,6 @@ class Application{
     }
 }
 
-var app = new Application()
-console.log(document.body)
-document.getElementById("title_effect").addEventListener("click", MouseClick)
-
-var initial_scale = app.mesh.scale;
-
 function animate(){
     const elapsedTime = app.clock.getElapsedTime()
     app.mesh.scale.set(2 + Math.sin(elapsedTime*2)/7.0,
@@ -69,9 +66,16 @@ function animate(){
     app.helper.update()
 }
 
+var app = new Application()
+var title_effect = document.getElementById("title_effect")
+animate()
+
 function MouseClick(evt) {
-    var mouse_pos = evt.clientX
-    console.log(mouse_pos)
+    // var canvasPosition = title_effect.position();
+    var canvas_pos = $(app.renderer.domElement).position()
+    var mouse_pos = {x: ((evt.clientX - canvas_pos.left) / app.renderer.domElement.width) - 1,
+                     y: ((evt.clientY - canvas_pos.top) / app.renderer.domElement.height) + 1}
+    console.log(mouse_pos.x, mouse_pos.y)
 }
 
-animate()
+title_effect.addEventListener("click", MouseClick)
